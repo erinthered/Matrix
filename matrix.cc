@@ -77,27 +77,20 @@ void Matrix<Object>::ReadMatrix() {
 }
 
 template <typename Object>
-const std::vector<Object> & Matrix<Object>::operator[](int row) const {
-//        std::vector<Object> vec(array_[row], array_[row]+num_columns_);
-
-  std::vector<Object> vec;
-  vec = array_[row];
-//    for(size_t i = 0; i < num_columns_; ++i)
-//      vec[i] = array_[row][i];
-    return vec;
+const std::vector<Object> Matrix<Object>::operator[](int row) const {
+  row -=1;
+  std::vector<Object> vec(array_[row], array_[row]+num_columns_);
+  Object* p = vec.data();
+  p = array_[row];
+  return vec;
 }
 template <typename Object>
-std::vector<Object> & Matrix<Object>::operator[](int row) {
-//    std::vector<Object> vec(array_[row], array_[row]+num_columns_);
-//    for(size_t i = 0; i < num_columns_; ++i)
-//      std::cout << vec[i] << " " << i;
-//      vec.push_back(array_[row][i]);
-//    return vec;
-  std::vector<Object> * vec;
-  vec = array_[row];
-//    for(size_t i = 0; i < num_columns_; ++i)
-//      vec[i] = array_[row][i];
-return *vec;
+std::vector<Object> Matrix<Object>::operator[](int row) {
+  row -=1;
+  std::vector<Object> vec(array_[row], array_[row]+num_columns_);
+  Object* p = vec.data();
+  p = array_[row];
+  return vec;
 }
 
 template <typename Object>
