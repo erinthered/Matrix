@@ -1,12 +1,17 @@
-// A simple basic implementation of a Matrix class
+/**********************************************************************
+Title:          matrix.h
+Author:         Erin Williams
+Date Created:   2/11/18
+Class:          Spring 2018 - CS335
+Purpose:        Assignment #1
+Description:    Header file for a basic templated matrix class.
+***********************************************************************/
 
-#ifndef TEACH_CSCI335_MATRIX_H_
-#define TEACH_CSCI335_MATRIX_H_
+#ifndef _CSCI335_MATRIX_H_
+#define _CSCI335_MATRIX_H_
 
 #include <iostream>
 
-
-// Make it a habit to use namespaces for your code.
 namespace linear_algebra_project {
 
 // Templated implementation of Matrix
@@ -22,89 +27,49 @@ namespace linear_algebra_project {
 template <typename Object>
 class Matrix {
  public:
-  Matrix() : num_columns_{0}, num_rows_{0} {
-    array_ = new Object *[num_rows_];
-  };
-  ~Matrix() {
-    DeleteMatrix();
-  }
-  Matrix(const Matrix &rhs) : num_columns_{rhs.num_columns_}, num_rows_{rhs.num_rows_} {
-    array_ = new Object *[rhs.num_rows_];
-    for(size_t i = 0; i < rhs.num_rows_; ++i) {
-      array_[i] = new Object[rhs.num_columns_];
-      for (size_t j = 0; j < rhs.num_columns_; ++j)
-        array_[i][j] = rhs.array_[i][j];
-    }
-  };
-  Matrix& operator=(const Matrix &rhs) {
-    if(this != &rhs) {
-      DeleteMatrix();
-      array_ = new Object *[rhs.num_rows_];
-    }
-    num_rows_ = rhs.num_rows_;
-    num_columns_ = rhs.num_columns_;
+  Matrix(size_t columns = 0, size_t rows = 0);
+  ~Matrix();
+  Matrix(const Matrix &rhs);
+  Matrix& operator=(const Matrix &rhs);
+  Matrix(Matrix &&rhs);
+  Matrix& operator=(Matrix &&rhs);
 
-    for(size_t i = 0; i < rhs.num_rows_; ++i) {
-      array_[i] = new Object[rhs.num_columns_];
-      for (size_t j = 0; j < rhs.num_columns_; ++j)
-        array_[i][j] = rhs.array_[i][j];
-    }
-    return *this;
-  };
-  Matrix(Matrix &&rhs) : num_columns_{rhs.num_columns_},
-                         num_rows_{rhs.num_rows_},
-                         array_{std::move(rhs.array_)} {
-    rhs.num_columns_ = 0;
-    rhs.num_rows_ = 0;
-    rhs.array_ = nullptr;
-  };
-  Matrix& operator=(Matrix &&rhs) {
-    std::swap(array_, rhs.array_);
-    return *this;
-  };
-/*  Matrix& operator=(Matrix &&rhs) {
-      DeleteMatrix();
-      array_ = rhs.array_;
-      num_columns_ = rhs.num_columns_;
-      num_rows_ = rhs.num_rows_;
-      rhs.array_ = nullptr;
-      rhs.num_rows_ = 0;
-      rhs.num_columns_ = 0;
-      return *this;
-  };
-  */
+  // populate matrix based on standard input stream input
+  // Precondition: First two items input must be integers and will
+  // determine the number of rows and columns in the matrix.
+  // Remaining input will fill matrix row by row.
+  // Ex: input 3 = matrix[0][0], input 4 = matrix[0][1], etc.
+  // No error checking for correct number of inputs to fill matrix.
+  // Postcondition: Matrix is of specified size
+  // and contains input entered by user in order of entry.
+  void ReadMatrix();
 
-
-  void ReadMatrix() {
-    DeleteMatrix();
-    std::cin >> num_rows_ >> num_columns_;
-    std::cout << "Rows: " << num_rows_ << " Columns: " << num_columns_ << std::endl;
-    array_ = new Object *[num_rows_];
-    for(size_t i = 0; i < num_rows_; ++i) {
-      array_[i] = new Object[num_columns_];
-      for(size_t j = 0; j < num_columns_; j++)
-        std::cin >> array_[i][j];
-    }
-   }
   // @row: an index to a row of the matrix.
   // @returns the row as a vector of items. No error checking.
   // const version.
-  const std::vector<Object> & operator[](int row) const
-  {  }
-
+  const std::vector<Object> & operator[](int row) const;
  // @row: an index to a row of the matrix.
  // @returns the row as a vector of items. No error checking.
  // non-cost version.
-  std::vector<Object> & operator[](int row)
-   {  }
+  std::vector<Object> & operator[](int row);
 
-  Matrix operator+(const Matrix &b_matrix) { }
-  Matrix operator+(const Object &an_object) { }
+  // @b_matrix: rhs matrix to add in operator
+  // Precondition: Matrices to be added must be of the same size and of types
+  // that can be added.
+  // Class Objects to be added must have existing + operator.
+  // Postcondition: returns new matrix containing added values of two Matrices
+  // using built in + operators of the Object classes stored in the Matrices.
+  Matrix operator+(const Matrix &b_matrix);
+  // @an_object: Object to be added to Matrix at position [0][0]
+  // Precondition: Obect must be of a type that can be added to the matrix
+  // and must have an existing + operator.
+  // Postcondition: array_[0][0] contains original value + an_object
+  Matrix operator+(const Object &an_object);
 
  // @returns number of rows.
-  size_t NumRows() const { return num_rows_; }
+  inline size_t NumRows() const { return num_rows_; }
   // @returns number of columns.
-  size_t NumCols() const { return num_columns_; }
+  inline size_t NumCols() const { return num_columns_; }
 
  // Overloading the << operator.
  friend std::ostream &operator<<(std::ostream &out, const Matrix &a_matrix) {
@@ -120,18 +85,13 @@ class Matrix {
  size_t num_columns_;
  size_t num_rows_;
  Object **array_;
- void DeleteMatrix() {
-   if(num_rows_ > 0) {
-   for(size_t i = 0; i < num_rows_; ++i) {
-     delete [] array_[i];
-     //std::cout << "Deleting array at " << i << std::endl;
-   }
- }
-   std::cout << "Deleting array\n";
-   delete [] array_;
- }
+ // helper function to delete matrix
+ void DeleteMatrix();
+
 };
 
 }  // namespace linear_algebra_project
 
-#endif  // TEACH_CSCI335_MATRIX_H
+#include "matrix.cc"
+
+#endif  // _CSCI335_MATRIX_H
