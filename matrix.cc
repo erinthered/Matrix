@@ -19,23 +19,28 @@ template <typename Object>
 Matrix<Object>::Matrix(size_t columns, size_t rows) : num_columns_{columns}, num_rows_{rows} {
   array_ = new Object *[num_rows_];
 };
+
 template <typename Object>
 Matrix<Object>::~Matrix() {
   DeleteMatrix();
 }
 
 template <typename Object>
-Matrix<Object>::Matrix(const Matrix<Object> &rhs) : num_columns_{rhs.num_columns_}, num_rows_{rhs.num_rows_} {
+Matrix<Object>::Matrix(const Matrix<Object> &rhs) : num_columns_{rhs.num_columns_}, 
+      num_rows_{rhs.num_rows_}, array_{nullptr} {
+
   array_ = new Object *[rhs.num_rows_];
+
   for(size_t i = 0; i < rhs.num_rows_; ++i) {
     array_[i] = new Object[rhs.num_columns_];
     for (size_t j = 0; j < rhs.num_columns_; ++j)
       array_[i][j] = rhs.array_[i][j];
   }
 };
+
 template <typename Object>
 Matrix<Object>& Matrix<Object>::operator=(const Matrix<Object> &rhs) {
-  if(this != &rhs) {
+/*  if(this != &rhs) {
     DeleteMatrix();
     array_ = new Object *[rhs.num_rows_];
   }
@@ -47,6 +52,9 @@ Matrix<Object>& Matrix<Object>::operator=(const Matrix<Object> &rhs) {
     for (size_t j = 0; j < rhs.num_columns_; ++j)
       array_[i][j] = rhs.array_[i][j];
   }
+  */
+  Matrix<Object> copy = rhs;
+  std::swap(*this, copy);
   return *this;
 };
 
@@ -58,9 +66,13 @@ Matrix<Object>::Matrix(Matrix<Object> &&rhs) : num_columns_{rhs.num_columns_},
   rhs.num_rows_ = 0;
   rhs.array_ = nullptr;
 };
+
 template <typename Object>
 Matrix<Object>& Matrix<Object>::operator=(Matrix<Object> &&rhs) {
+  std::swap(num_columns_, rhs.num_columns_);
+  std::swap(num_rows_, rhs.num_rows_);
   std::swap(array_, rhs.array_);
+
   return *this;
 };
 
