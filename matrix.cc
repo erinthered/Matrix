@@ -40,19 +40,6 @@ Matrix<Object>::Matrix(const Matrix<Object> &rhs) : num_columns_{rhs.num_columns
 
 template <typename Object>
 Matrix<Object>& Matrix<Object>::operator=(const Matrix<Object> &rhs) {
-/*  if(this != &rhs) {
-    DeleteMatrix();
-    array_ = new Object *[rhs.num_rows_];
-  }
-  num_rows_ = rhs.num_rows_;
-  num_columns_ = rhs.num_columns_;
-
-  for(size_t i = 0; i < rhs.num_rows_; ++i) {
-    array_[i] = new Object[rhs.num_columns_];
-    for (size_t j = 0; j < rhs.num_columns_; ++j)
-      array_[i][j] = rhs.array_[i][j];
-  }
-  */
   Matrix<Object> copy = rhs;
   std::swap(*this, copy);
   return *this;
@@ -91,12 +78,9 @@ void Matrix<Object>::ReadMatrix() {
 template <typename Object>
 std::vector<Object> Matrix<Object>::operator[](int row) const {
   row -=1;
-  //std::vector<Object> vec(array_[row], array_[row]+num_columns_);
   std::vector<Object> v(num_columns_);
   for(size_t i = 0; i < num_columns_; ++i)
     v[i] = array_[row][i];
-  //Object* p = vec.data();
-  //p = array_[row];
   return v;
 }
 
