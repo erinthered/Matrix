@@ -47,11 +47,7 @@ class Matrix {
   // @row: an index to a row of the matrix.
   // @returns the row as a vector of items. No error checking.
   // const version.
-  const std::vector<Object> operator[](int row) const;
- // @row: an index to a row of the matrix.
- // @returns the row as a vector of items. No error checking.
- // non-cost version.
-  std::vector<Object> operator[](int row);
+  std::vector<Object> operator[](int row) const;
 
   // @b_matrix: rhs matrix to add in operator
   // Precondition: Matrices to be added must be of the same size and of types

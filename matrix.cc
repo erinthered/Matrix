@@ -77,20 +77,15 @@ void Matrix<Object>::ReadMatrix() {
 }
 
 template <typename Object>
-const std::vector<Object> Matrix<Object>::operator[](int row) const {
+std::vector<Object> Matrix<Object>::operator[](int row) const {
   row -=1;
-  std::vector<Object> vec(array_[row], array_[row]+num_columns_);
-  Object* p = vec.data();
-  p = array_[row];
-  return vec;
-}
-template <typename Object>
-std::vector<Object> Matrix<Object>::operator[](int row) {
-  row -=1;
-  std::vector<Object> vec(array_[row], array_[row]+num_columns_);
-  Object* p = vec.data();
-  p = array_[row];
-  return vec;
+  //std::vector<Object> vec(array_[row], array_[row]+num_columns_);
+  std::vector<Object> v(num_columns_);
+  for(size_t i = 0; i < num_columns_; ++i)
+    v[i] = array_[row][i];
+  //Object* p = vec.data();
+  //p = array_[row];
+  return v;
 }
 
 template <typename Object>
