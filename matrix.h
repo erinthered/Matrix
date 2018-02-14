@@ -35,7 +35,7 @@ class Matrix {
   Matrix& operator=(Matrix &&rhs);
 
   // populate matrix based on standard input stream input
-  // Precondition: First two items input must be integers and will
+  // Precondition: First two items input must be positive integers and will
   // determine the number of rows and columns in the matrix.
   // Remaining input will fill matrix row by row.
   // Ex: input 3 = matrix[0][0], input 4 = matrix[0][1], etc.

@@ -16,7 +16,9 @@ Description:    Implementation file for a basic templated matrix class.
 namespace linear_algebra_project {
 
 template <typename Object>
-Matrix<Object>::Matrix(size_t columns, size_t rows) : num_columns_{columns}, num_rows_{rows} {
+Matrix<Object>::Matrix(size_t columns, size_t rows) : 
+      num_columns_{columns}, num_rows_{rows} {
+  num_rows_ < 0 ? num_rows_ = 0 : num_rows_ = rows;
   array_ = new Object *[num_rows_];
 };
 
