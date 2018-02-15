@@ -18,7 +18,6 @@ namespace linear_algebra_project {
 template <typename Object>
 Matrix<Object>::Matrix(size_t columns, size_t rows) : 
       num_columns_{columns}, num_rows_{rows} {
-  num_rows_ < 0 ? num_rows_ = 0 : num_rows_ = rows;
   array_ = new Object *[num_rows_];
 };
 
@@ -79,11 +78,7 @@ void Matrix<Object>::ReadMatrix() {
 
 template <typename Object>
 std::vector<Object> Matrix<Object>::operator[](int row) const {
-  row -=1;
-  std::vector<Object> v(num_columns_);
-  for(size_t i = 0; i < num_columns_; ++i)
-    v[i] = array_[row][i];
-  return v;
+  return (std::vector<Object>(&array_[row-1][0], &array_[row-1][num_columns_]));
 }
 
 template <typename Object>
@@ -100,8 +95,8 @@ Matrix<Object> Matrix<Object>::operator+(const Matrix<Object> &b_matrix) {
 }
 template <typename Object>
 Matrix<Object> Matrix<Object>::operator+(const Object &an_object) {
-  Matrix<Object> m{};
-  m = *this;
+  Matrix<Object> m{*this};
+  
   m.array_[0][0] += an_object;
   return m;
  }
