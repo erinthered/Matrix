@@ -41,7 +41,7 @@ Matrix<Object>::Matrix(const Matrix<Object> &rhs) : num_columns_{rhs.num_columns
 
 template <typename Object>
 Matrix<Object>& Matrix<Object>::operator=(const Matrix<Object> &rhs) {
-  Matrix<Object> copy = rhs;
+  Matrix<Object> copy{rhs};
   std::swap(*this, copy);
   return *this;
 };
@@ -87,7 +87,7 @@ Matrix<Object> Matrix<Object>::operator+(const Matrix<Object> &b_matrix) {
   if(num_rows_ == b_matrix.num_rows_ && num_columns_ == b_matrix.num_columns_) {
     m = *this;
     for(size_t i = 0; i < num_rows_; ++i) {
-      for(size_t j = 0; j < num_columns_; j++)
+      for(size_t j = 0; j < num_columns_; ++j)
         m.array_[i][j] += b_matrix.array_[i][j];
     }
   }
@@ -96,8 +96,11 @@ Matrix<Object> Matrix<Object>::operator+(const Matrix<Object> &b_matrix) {
 template <typename Object>
 Matrix<Object> Matrix<Object>::operator+(const Object &an_object) {
   Matrix<Object> m{*this};
-  
-  m.array_[0][0] += an_object;
+
+  for(size_t i = 0; i < num_rows_; ++i) {
+    for(size_t j = 0; j < num_columns_; ++j)
+      m.array_[i][j] += an_object;
+  }
   return m;
  }
 
